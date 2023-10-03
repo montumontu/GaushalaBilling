@@ -1,20 +1,31 @@
 const excelSheet = require("./excelSheet.controller");
 const pdfGenerator = require("./tryejs");
 const archive = require("./archiver");
-const sheet = "January 2023!A1:AR43";
-const dateFormat = require("./modules/utils/date");
+const sheet = "September 2023!A1:AO35";
+const nextMonth = require("./modules/utils/nextMonth");
+//const { sendBill } = require("./whatsapp");
+
 
 const generateBill = async () => {
+  const whatsAPP = [];
   const monthlyAllCustomerData = await excelSheet.get(sheet);
+  console.log(JSON.stringify(monthlyAllCustomerData));
   for (let i = 1; i < monthlyAllCustomerData.length; i++) {
+
+  // for (let i = 1; i < 2; i++) {
     console.log(monthlyAllCustomerData[i]);
     const file = await pdfGenerator.createPDFFile(monthlyAllCustomerData[i]);
     console.log(file);
+    whatsAPP.push({ fileName: file, mobile: monthlyAllCustomerData[i][42]  });
   }
-  const month = dateFormat.getNextMonth();
-  const archiveFile = await archive("invoicepdf", "invoice.zip");
+  console.log(JSON.stringify(whatsAPP));
+  //await sendBill(whatsAPP);
 
-  console.log("creation completed of the archive - " + archiveFile);
+  const nextMonthObj = new nextMonth();
+  const month = "September" || nextMonthObj.get(); // get the last month
+  //const archiveFile = await archive("invoicepdf", "invoice.zip");
+
+  //console.log("creation completed of the archive - " + archiveFile);
   return;
 }
 
