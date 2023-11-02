@@ -1,4 +1,4 @@
-const pdf = require('html-pdf');
+//const pdf = require('html-pdf');
 const ejs = require('ejs');
 const nextMonth = require("./modules/utils/nextMonth");
 const nextMonthObj = new nextMonth();
@@ -7,7 +7,7 @@ config = {
   "orientation": "landscape",
   "timeout": 50000  // portrait or landscape
 }
-const month = "September" || nextMonthObj.get();
+const month = "October" || nextMonthObj.get();
 const currentDate = new Date().toISOString().split('T')[0];
 
 
@@ -15,17 +15,27 @@ const createPDFFile = async (data1) => {
   return new Promise((resolve, reject) => {
     const randomNumber = `NGG${Date.now()}`
 
-    ejs.renderFile('invoice.ejs', { data: data1, month, currentDate, randomNumber }, config, (err, data) => {
+    ejs.renderFile('invoice.ejs', { data: data1, month, currentDate, randomNumber }, config, async (err, data) => {
       if (err) {
         console.log(err);
         reject(err);
       } else {
-        console.log("------------------------------------", data1[0]);
-        pdf.create(data, config).toFile(`./invoicepdf/${data1[0]}-${month}.pdf`, function (err, res) {
-          if (err) return console.log(err);
-          console.log(res);
-          resolve(`${data1[0]}-${month}.pdf`);
-        });
+        console.log("------------------------------------", data, data1[0]);
+        const puppeteer = require('puppeteer');
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setViewport({ width: 1000, height: 595 }); // Adjust the dimensions as needed
+        await page.setContent(data);
+        await page.pdf({ path: `./invoicepdf/${data1[0]}-${month}.pdf`, format: 'A4', landscape: true });
+        await browser.close();
+        resolve(`${data1[0]}-${month}.pdf`);
+
+        // pdf.create(data, config).toFile(`./invoicepdf/${data1[0]}-${month}.pdf`, function (err, res) {
+        //   if (err) return console.log(err);
+        //   console.log(res);
+        //   resolve(`${data1[0]}-${month}.pdf`);
+        // });
       }
     });
 

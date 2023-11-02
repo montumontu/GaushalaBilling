@@ -1,7 +1,7 @@
 const excelSheet = require("./excelSheet.controller");
 const pdfGenerator = require("./tryejs");
 const archive = require("./archiver");
-const sheet = "September 2023!A1:AO35";
+const sheet = "October 2023!A1:AS29";
 const nextMonth = require("./modules/utils/nextMonth");
 //const { sendBill } = require("./whatsapp");
 
@@ -11,7 +11,6 @@ const generateBill = async () => {
   const monthlyAllCustomerData = await excelSheet.get(sheet);
   console.log(JSON.stringify(monthlyAllCustomerData));
   for (let i = 1; i < monthlyAllCustomerData.length; i++) {
-
   // for (let i = 1; i < 2; i++) {
     console.log(monthlyAllCustomerData[i]);
     const file = await pdfGenerator.createPDFFile(monthlyAllCustomerData[i]);

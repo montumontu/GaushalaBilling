@@ -15,11 +15,12 @@
     "fs": "^0.0.1-security",
     "google-spreadsheet": "^3.3.0",
     "googleapis": "^110.0.0",
-    "html-pdf": "^3.0.1",
+    "jsreport-core": "^2.10.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.1",
     "pdfkit": "^0.13.0",
     "pdfmake": "^0.2.7",
+    "puppeteer": "^21.4.1",
     "venom-bot": "^5.0.0"
   },
   "devDependencies": {
